@@ -11,5 +11,4 @@ class Board:
 class Location:
     def __init__():
         return 0
-        self.gold = False
-        self.wumpus = False 
+        
