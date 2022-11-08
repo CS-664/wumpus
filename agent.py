@@ -64,6 +64,7 @@ class KB:
         self.visited[x][y] = True
         self.safe[x][y] = True
         #Case 1: No Stench or Breeze
+        #Do I need check current pit/wumpus possibility? 72 and 79
         if not self.stench[x][y] and not self.breeze[x][y]:
 
             if self.pit[x][y] == -1.0:
@@ -99,11 +100,14 @@ class KB:
                 self.safe[loc[0]][loc[1]] = True 
         #Case 2: Stench and Breeze
         elif self.stench[x][y] and self.breeze[x][y]:
-            candidate = []
+            stench_candidate = []
+            breeze_candidate = []
             for loc in neighbor(x,y):
                 nx, ny = loc[0], loc[1]
-                if not self.visited[nx][ny] and not self.safe[nx][ny]:
-                    candidate.append([nx,ny])
+                if self.pit[nx][ny] == -1.0 or 0.0 < self.pit[nx][ny] < 1.0:
+                    breeze_candidate.append([nx,ny])
+                if self.wumpus[nx][ny] == -1.0 or 0.0 < self.wumpus[nx][ny] < 1.0:
+                    stench_candidate.append([nx,ny])
                 #clear pit probability
                 if self.pit[nx][ny] != 0.0:
                     self.pit[nx][ny] = 0.0
