@@ -43,11 +43,13 @@ class KBAgent:
     
 class KB:
     def __init__(self, board_size):
-        self.wumpus = [[0 for x in range(board_size)] for y in range(board_size)]
-        self.pit = [[0 for x in range(board_size)] for y in range(board_size)]
-        self.breeze = [[0 for x in range(board_size)] for y in range(board_size)]
+        self.wumpus = [[False for x in range(board_size)] for y in range(board_size)]
+        self.pit = [[False for x in range(board_size)] for y in range(board_size)]
+        self.breeze = [[False for x in range(board_size)] for y in range(board_size)]
         self.stench = [[False for x in range(board_size)] for y in range(board_size)]
-        self.gold = [[0 for x in range(board_size)] for y in range(board_size)]
+        self.gold = [[False for x in range(board_size)] for y in range(board_size)]
+        self.loc = [[False for x in range(board_size)] for y in range(board_size)]
+        self.rule = set()
     
     def update(self):
         
