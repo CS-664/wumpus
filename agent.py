@@ -100,6 +100,7 @@ class KB:
                 self.safe[loc[0]][loc[1]] = True 
         #Case 2: Stench and Breeze
         elif self.stench[x][y] and self.breeze[x][y]:
+            #Probably have to check pit prob and wumpus prob of current loc
             stench_candidate = []
             breeze_candidate = []
             for loc in neighbor(x,y):
@@ -108,22 +109,20 @@ class KB:
                     breeze_candidate.append([nx,ny])
                 if self.wumpus[nx][ny] == -1.0 or 0.0 < self.wumpus[nx][ny] < 1.0:
                     stench_candidate.append([nx,ny])
-                #clear pit probability
-                if self.pit[nx][ny] != 0.0:
-                    self.pit[nx][ny] = 0.0
-                    for s in breeze_neighbor(nx,ny):
-                        cal_pit(s[0],s[1])
-            for i in range(len(candidate)):
-                self.wumpus[candidate[i][0]][candidate[i][1]] = 1/len(candidate)
+            for i in range(len(stench_candidate)):
+                self.wumpus[stench_candidate[i][0]][stench_candidate[i][1]] = 1/len(stench_candidate)
+            for i in range(len(breeze_candidate)):
+                self.pit[breeze_candidate[i][0]][breeze_candidate[i][1]] = 1/len(breeze_candidate)
         #Case 3: Breeze
         elif self.breeze[x][y]:
+            #Probably have to check pit prob and wumpus prob of current loc
             candidate = []
             for loc in neighbor(x,y):
                 nx, ny = loc[0], loc[1]
-                if self.pit[nx][ny] != 0.0:
+                if self.pit[nx][ny] == -1.0 or 0.0 < self.pit[nx][ny] < 1.0:
                     candidate.append([nx,ny])
                 #clear wumpus probability
-                if self.wumpus[nx][ny] != 0.0:
+                if 0.0 < self.wumpus[nx][ny] < 1.0:
                     self.wumpus[nx][ny] = 0.0
                     for s in stench_neighbor(nx,ny):
                         cal_wumpus(s[0],s[1])
@@ -131,7 +130,19 @@ class KB:
                 self.pit[candidate[i][0],candidate[i][1]] = 1/len(candidate)
         #Case 4: Stench
         elif self.stench[x][y]:
+            #Probably have to check pit prob and wumpus prob of current loc
             candidate = []
+            for loc in neighbor(x,y):
+                nx, ny = loc[0], loc[1]
+                if self.wumpus[nx][ny] == -1.0 or 0.0 < self.wumpus[nx][ny] < 1.0:
+                    candidate.append([nx,ny])
+                #clear pit probability
+                if 0.0 < self.pit[nx][ny] < 1.0:
+                    self.pit[nx][ny] = 0.0
+                    for s in breeze_neighbor(nx,ny):
+                        cal_pit(s[0],s[1])
+            for i in range(len(candidate)):
+                self.wumpus[candidate[i][0],candidate[i][1]] = 1/len(candidate)
             
     def cal_wumpus(x,y): 
         #recalculate the probability of wumpus around the stench
