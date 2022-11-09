@@ -2,6 +2,7 @@ __all__ = [
     'Actions',
     'KBAgent',
     'KB',
+    'Directions',
 ]
 class Actions(enum.Enum):
    left = 1
@@ -10,6 +11,12 @@ class Actions(enum.Enum):
    grab = 4
    release = 5
    shoot = 6
+
+class Directions(enum.Enum):
+    North = 1
+    East = 2
+    South = 3
+    West = 4
 
 class KBAgent:
     def __init__(self, x, y, board_size):
@@ -24,11 +31,11 @@ class KBAgent:
             self.tell(curloc.x, curloc.y, 'b')
         if curloc.glitter:
             self.tell(curloc.x, curloc.y, 'g')
+        self.kb.update()
 
     def act(self):
         self.perceive()
-        self.kb.update()
-        action = self.ask()
+        actions = self.ask()
         self.tell()
         return action
     
@@ -38,7 +45,41 @@ class KBAgent:
         elif z == 'b':
             self.kb.breeze[x][y] = True
         elif z == 'g':
-            self.kb.gold[x][y] = True 
+            self.kb.gold[x][y] = True
+        elif z == Actions.left:
+            if self.kb.dir == Directions.North:
+                self.kb.dir = Directions.West
+            elif self.kb.dir == Directions.West:
+                self.kb.dir = Directions.South
+            elif self.kb.dir == Directions.South:
+                self.kb.dir = Directions.East 
+            else:
+                self.kb.dir = Directions.North
+        elif z == Actions.right:
+            if self.kb.dir == Directions.North:
+                self.kb.dir = Directions.East
+            elif self.kb.dir == Dirctions.East:
+                self.kb.dir = Directions.South
+            elif self.kb.dir == Directions.South:
+                self.kb.dir = Directions.West
+            else:
+                self.kb.dir = Directions.North
+        elif z == Actions.forward:
+            if self.kb.dir == Directions.North:
+                self.kb.x = self.kb.x - 1
+            elif self.kb.dir == Dirctions.East:
+                self.kb.y = self.kb.y + 1
+            elif self.kb.dir == Directions.South:
+                self.kb.x = self.kb.x + 1
+            else:
+                self.kb.y = self.kb.y - 1
+        elif z == Actions.shoot:
+            self.kb.shoot()
+        elif z == Actions.grab:
+            self.kb.grab()
+        elif z == Actions.release:
+            self.kb.release()
+
 
     def ask(self):
         return 0
@@ -56,6 +97,7 @@ class KB:
         self.arrow = True
         self.x = x
         self.y = y
+        self.dir = Directions.North
     
     def update(self):
         x, y = self.x, self.y
@@ -143,6 +185,15 @@ class KB:
                         cal_pit(s[0],s[1])
             for i in range(len(candidate)):
                 self.wumpus[candidate[i][0],candidate[i][1]] = 1/len(candidate)
+        #Gold Case
+        #Shoot Case
+        #Release Case
+    def shoot():
+        return 0
+    def grab():
+        return 0
+    def release():
+        return 0 
             
     def cal_wumpus(x,y): 
         #recalculate the probability of wumpus around the stench
