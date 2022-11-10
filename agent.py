@@ -227,7 +227,7 @@ class KB:
         for i in range(4):
             nx = x + dir[i]
             ny = y + dir[i+1]
-            if 0 <= nx <= len(self.loc)-1 and 0 <= ny <= len(self.loc)-1 and self.stench[nx][ny]:
+            if 0 <= nx <= len(self.safe)-1 and 0 <= ny <= len(self.safe)-1 and self.stench[nx][ny]:
                 res.append([nx, ny])
         return res
 
@@ -237,7 +237,7 @@ class KB:
         for i in range(4):
             nx = x + dir[i]
             ny = y + dir[i+1]
-            if 0 <= nx <= len(self.loc)-1 and 0 <= ny <= len(self.loc)-1 and self.breeze[nx][ny]:
+            if 0 <= nx <= len(self.safe)-1 and 0 <= ny <= len(self.safe)-1 and self.breeze[nx][ny]:
                 res.append([nx, ny])
         return res
 
