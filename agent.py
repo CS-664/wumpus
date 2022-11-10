@@ -7,7 +7,7 @@ __all__ = [
     'Directions',
 ]
 class Actions(enum.Enum):
-   left = 1
+   left = 1 
    right = 2
    forward = 3
    grab = 4
@@ -85,11 +85,18 @@ class KBAgent:
         #Gold
         if self.gold[x][y] == True:
             return [Actions.grab]
-        if 
+        
 
     def findPath(startx, starty, endx, endy):
         return [] 
-        
+
+    #need to implement possibility of killing wumpus to get potential loc
+    def potential_loc():
+        res = []
+        for i in range(len(self.kb.safe)):
+            for j in range(len(self.kb.safe[0])):
+                if self.kb.safe[i][j] and not self.kb.visited[i][j]:
+
     
 class KB:
     def __init__(self, x, y, board_size):
