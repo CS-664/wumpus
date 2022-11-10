@@ -39,7 +39,7 @@ class KBAgent:
         self.perceive()
         actions = self.ask()
         self.tell()#Tell actions
-        return action
+        return actions
     
     def tell(self, x, y, z):
         if z == 's':
@@ -81,7 +81,14 @@ class KBAgent:
     def ask(self):
         res = []
         k = self.kb 
-        x ,y  
+        x ,y = self.kb.x, self.kb.y 
+        #Gold
+        if self.gold[x][y] == True:
+            return [Actions.grab]
+        if 
+
+    def findPath(startx, starty, endx, endy):
+        return [] 
         
     
 class KB:
@@ -227,7 +234,7 @@ class KB:
         for i in range(4):
             nx = x + dir[i]
             ny = y + dir[i+1]
-            if 0 <= nx <= len(self.loc)-1 and 0 <= ny <= len(self.loc)-1 and self.stench[nx][ny]:
+            if 0 <= nx <= len(self.safe)-1 and 0 <= ny <= len(self.safe)-1 and self.stench[nx][ny]:
                 res.append([nx, ny])
         return res
 
@@ -237,7 +244,7 @@ class KB:
         for i in range(4):
             nx = x + dir[i]
             ny = y + dir[i+1]
-            if 0 <= nx <= len(self.loc)-1 and 0 <= ny <= len(self.loc)-1 and self.breeze[nx][ny]:
+            if 0 <= nx <= len(self.safe)-1 and 0 <= ny <= len(self.safe)-1 and self.breeze[nx][ny]:
                 res.append([nx, ny])
         return res
 
