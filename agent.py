@@ -1,3 +1,5 @@
+import enum 
+
 __all__ = [
     'Actions',
     'KBAgent',
@@ -36,7 +38,7 @@ class KBAgent:
     def act(self):
         self.perceive()
         actions = self.ask()
-        self.tell()
+        self.tell()#Tell actions
         return action
     
     def tell(self, x, y, z):
@@ -75,14 +77,12 @@ class KBAgent:
                 self.kb.y = self.kb.y - 1
         elif z == Actions.shoot:
             self.kb.shoot()
-        elif z == Actions.grab:
-            self.kb.grab()
-        elif z == Actions.release:
-            self.kb.release()
-
 
     def ask(self):
-        return 0
+        res = []
+        k = self.kb 
+        x ,y  
+        
     
 class KB:
     def __init__(self, x, y, board_size):
@@ -185,15 +185,19 @@ class KB:
                         cal_pit(s[0],s[1])
             for i in range(len(candidate)):
                 self.wumpus[candidate[i][0],candidate[i][1]] = 1/len(candidate)
-        #Gold Case
-        #Shoot Case
-        #Release Case
-    def shoot():
-        return 0
-    def grab():
-        return 0
-    def release():
-        return 0 
+        
+    def shoot(self):
+        if self.arrow == False:
+            return
+        if self.dir == Directions.North:
+            self.wumpus[self.x-1][y] = 0.0
+        elif self.dir == Directions.South:
+            self.wumpus[self.x+1][y] = 0.0
+        elif self.dir == Directions.East:
+            self.wumpus[self.x][y+1] = 0.0
+        else:
+            self.wumpus[self.x][y-1] = 0.0
+        self.arrow = False  
             
     def cal_wumpus(x,y): 
         #recalculate the probability of wumpus around the stench
