@@ -95,7 +95,58 @@ class KBAgent:
 
 
     def findPath(self,startx, starty, endx, endy):
-        return [] 
+        oldPath = []
+        newPath = []
+        xx = startx
+        yy = starty
+        while(xx != endx):
+            while(yy != endy):
+                if self.kb.safe[xx+1][yy] == True:
+                    xx+=1
+                    oldPath.append(1)
+                elif self.kb.safe[xx][yy+1] == True:
+                    yy+=1
+                    oldPath.append(2)
+                elif self.kb.safe[xx-1][yy] == True:
+                    xx-=1
+                    oldPath.append(3)
+                elif self.kb.safe[xx][yy-1] == True:
+                    yy-=1
+                    oldPath.append(4)
+        for num in oldPath:
+            if self.kb.dir == Directions.North:
+                if num == 1:
+                    newPath.append(Actions.right)
+                elif num == 2:
+                    newPath.append(Actions.forward)
+                elif num == 3:
+                    newPath.append(Actions.left)
+
+            elif self.kb.dir == Directions.South:
+                if num == 1:
+                    newPath.append(Actions.left)
+                elif num == 4:
+                    newPath.append(Actions.forward)
+                elif num == 3:
+                    newPath.append(Actions.right)
+
+            elif self.kb.dir == Directions.East:
+                if num == 1:
+                    newPath.append(Actions.forward)
+                elif num == 2:
+                    newPath.append(Actions.left)
+                elif num == 4:
+                    newPath.append(Actions.right)
+
+            elif self.kb.dir == Directions.West:
+                if num == 4:
+                    newPath.append(Actions.left)
+                elif num == 2:
+                    newPath.append(Actions.right)
+                elif num == 3:
+                    newPath.append(Actions.forward)
+
+        return newPath
 
     #need to implement possibility of killing wumpus to get potential loc
     def potential_loc(self):
