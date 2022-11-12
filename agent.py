@@ -21,7 +21,7 @@ class Directions(enum.Enum):
     West = 4
 
 class KBAgent:
-    def __init__(self, x, y, board_size):
+    def __init__(self, x, y, xstart,ystart):
         self.kb = KB(x, y, board_size)# knowledge base
         self.t = 0 #time counter
 

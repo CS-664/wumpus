@@ -18,21 +18,23 @@ def InitialBoard():
     fileObject = open('BoardInfrom.txt', "r")
     data = fileObject.read()          # Get the detail of testing board
     BoardInform = data.split();
-    TBoard = Board(4,4)                 # initial game board
-    for i in range(len(BoardInform)-1):     # Update information following given map
+    TBoard = Board(5,5)                 # initial game board
+    for i in range(len(BoardInform)):     # Update information following given map
         iniboard = BoardInform[i].split(",")
         for n in range(2,len(iniboard)):
             TBoard.input(int(iniboard[0]),int(iniboard[1]),informChecker(iniboard[n]))
-    return TBoard
+    return TBoard.map
 
 
 
 def main():
+#    print(InitialBoard())
+
     gameBoard = InitialBoard()      # initializate game information
-    gameAgent = KBAgent(0,0,25)
+    gameAgent = KBAgent(5,5,0,0)
     gameScore = 100
 
-    gameAgent.act()
+    print(gameAgent.act())
 
 
 
