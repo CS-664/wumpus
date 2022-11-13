@@ -22,21 +22,20 @@ class Directions(enum.Enum):
 
 class KBAgent:
     def __init__(self, x, y, xstart,ystart):
-        self.kb = KB(x, y, board_size)# knowledge base
+        self.kb = KB(xstart, ystart, x, y)# knowledge base
         self.t = 0 #time counter
 
-    def perceive(self):
-        curloc = self.loc 
-        if curloc.stench:
-            self.tell(curloc.x, curloc.y, 's')
-        if curloc.breeze:
-            self.tell(curloc.x, curloc.y, 'b')
-        if curloc.glitter:
-            self.tell(curloc.x, curloc.y, 'g')
+    def perceive(self, gameboard):
+        if gameboard[self.kb.x][self.kb.y]["stench"]:
+            self.tell(self.kb.x, self.kb.y, 's')
+        if gameboard[self.kb.x][self.kb.y]["breezy"]:
+            self.tell(self.kb.x, self.kb.y, 'b')
+        if gameboard[self.kb.x][self.kb.y]["gold"]:
+            self.tell(self.kb.x, self.kb.y, 'g')
         self.kb.update()
 
-    def act(self):
-        self.perceive()
+    def act(self, gameboard):
+        self.perceive(gameboard)
         actions = self.ask()
         for action in actions:
             self.tell(0,0,action)
@@ -83,9 +82,10 @@ class KBAgent:
         k = self.kb 
         x ,y = self.kb.x, self.kb.y 
         #Gold
-        if self.gold[x][y] == True:
+        if k.gold[x][y] == True:
             return [Actions.grab]
         locations = self.potential_loc()
+        print(len(locations))
         if len(locations) != 0:
             for loc in locations:
                 return self.findPath(x,y,loc[0],loc[1])
@@ -145,7 +145,6 @@ class KBAgent:
                     newPath.append(Actions.right)
                 elif num == 3:
                     newPath.append(Actions.forward)
-
         return newPath
 
     #need to implement possibility of killing wumpus to get potential loc
@@ -159,15 +158,15 @@ class KBAgent:
 
     
 class KB:
-    def __init__(self, x, y, board_size):
+    def __init__(self, x, y, boardx, boardy):
         # -1 for unknow; 0 for False; 0-1 for probability; 1 for True
-        self.wumpus = [[-1.0 for x in range(board_size)] for y in range(board_size)]
-        self.pit = [[-1.0 for x in range(board_size)] for y in range(board_size)]
-        self.breeze = [[False for x in range(board_size)] for y in range(board_size)]
-        self.stench = [[False for x in range(board_size)] for y in range(board_size)]
-        self.gold = [[False for x in range(board_size)] for y in range(board_size)]
-        self.safe = [[False for x in range(board_size)] for y in range(board_size)]
-        self.visited = [[False for x in range(board_size)] for y in range(board_size)]
+        self.wumpus = [[-1.0 for x in range(boardx)] for y in range(boardy)]
+        self.pit = [[-1.0 for x in range(boardx)] for y in range(boardy)]
+        self.breeze = [[False for x in range(boardx)] for y in range(boardy)]
+        self.stench = [[False for x in range(boardx)] for y in range(boardy)]
+        self.gold = [[False for x in range(boardx)] for y in range(boardy)]
+        self.safe = [[False for x in range(boardx)] for y in range(boardy)]
+        self.visited = [[False for x in range(boardx)] for y in range(boardy)]
         self.arrow = True
         self.x = x
         self.y = y
@@ -322,7 +321,7 @@ class KB:
         for i in range(4):
             nx = x + dir[i]
             ny = y + dir[i+1]
-            if 0 <= nx <= len(self.loc)-1 and 0 <= ny <= len(self.loc)-1:
+            if 0 <= nx <= len(self.safe)-1 and 0 <= ny <= len(self.safe)-1:
                 res.append([nx, ny])
         return res
     

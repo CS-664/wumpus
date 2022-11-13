@@ -3,21 +3,21 @@ from agent import *
 import os
 
 def informChecker(w):
-    if w == 'G' or 'g':
+    if w == 'G' or w == 'g':
         return 'gold'
-    elif w == 'W' or 'w':
+    elif w == 'W' or w == 'w':
         return 'wumpus'
-    elif w == 'B' or 'b':
+    elif w == 'B' or w == 'b':
         return 'breezy'
-    elif w == 'S' or 's':
+    elif w == 'S' or w == 's':
         return 'stench'
-    elif w == 'P' or 'p':
+    elif w == 'P' or w == 'p':
         return 'pit'
 
 def InitialBoard():
     fileObject = open('BoardInfrom.txt', "r")
     data = fileObject.read()          # Get the detail of testing board
-    BoardInform = data.split();
+    BoardInform = data.split()
     TBoard = Board(5,5)                 # initial game board
     for i in range(len(BoardInform)):     # Update information following given map
         iniboard = BoardInform[i].split(",")
@@ -33,8 +33,7 @@ def main():
     gameBoard = InitialBoard()      # initializate game information
     gameAgent = KBAgent(5,5,0,0)
     gameScore = 100
-
-    print(gameAgent.act())
+    print(gameAgent.act(gameBoard))
 
 
 
