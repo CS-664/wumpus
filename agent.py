@@ -99,20 +99,30 @@ class KBAgent:
         newPath = []
         xx = startx
         yy = starty
-        while(xx != endx):
-            while(yy != endy):
-                if self.kb.safe[xx+1][yy] == True:
+        # print(startx, starty, endx, endy)
+        # print(self.kb.safe[xx][yy+1])
+        while not (xx == endx and yy == endy):
+            if xx != endx:
+                if self.kb.safe[xx+1][yy] == False:
                     xx+=1
                     oldPath.append(1)
-                elif self.kb.safe[xx][yy+1] == True:
-                    yy+=1
-                    oldPath.append(2)
+
                 elif self.kb.safe[xx-1][yy] == True:
                     xx-=1
                     oldPath.append(3)
+
+            elif yy != endy:
+                if self.kb.safe[xx][yy+1] == True:
+                    yy+=1
+                    oldPath.append(2)
+
                 elif self.kb.safe[xx][yy-1] == True:
                     yy-=1
                     oldPath.append(4)
+
+            else:
+                oldPath.append(5)
+
         for num in oldPath:
             if self.kb.dir == Directions.North:
                 if num == 1:
