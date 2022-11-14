@@ -85,7 +85,6 @@ class KBAgent:
         if k.gold[x][y] == True:
             return [Actions.grab]
         locations = self.potential_loc()
-        print(len(locations))
         if len(locations) != 0:
             for loc in locations:
                 return self.findPath(x,y,loc[0],loc[1])
@@ -103,58 +102,79 @@ class KBAgent:
         # print(self.kb.safe[xx][yy+1])
         while not (xx == endx and yy == endy):
             if xx != endx:
-                if self.kb.safe[xx+1][yy] == False:
+                if self.kb.safe[xx+1][yy] == True:
                     xx+=1
-                    oldPath.append(1)
+                    oldPath.append(1)#north
 
                 elif self.kb.safe[xx-1][yy] == True:
                     xx-=1
-                    oldPath.append(3)
+                    oldPath.append(3)#south
 
             elif yy != endy:
                 if self.kb.safe[xx][yy+1] == True:
                     yy+=1
-                    oldPath.append(2)
+                    oldPath.append(2)#east
 
                 elif self.kb.safe[xx][yy-1] == True:
                     yy-=1
-                    oldPath.append(4)
+                    oldPath.append(4)#west
 
             else:
                 oldPath.append(5)
 
+        curdir = self.kb.dir 
         for num in oldPath:
-            if self.kb.dir == Directions.North:
-                if num == 1:
-                    newPath.append(Actions.right)
-                elif num == 2:
-                    newPath.append(Actions.forward)
-                elif num == 3:
-                    newPath.append(Actions.left)
-
-            elif self.kb.dir == Directions.South:
-                if num == 1:
-                    newPath.append(Actions.left)
-                elif num == 4:
-                    newPath.append(Actions.forward)
-                elif num == 3:
-                    newPath.append(Actions.right)
-
-            elif self.kb.dir == Directions.East:
+            if curdir == Directions.North:
                 if num == 1:
                     newPath.append(Actions.forward)
                 elif num == 2:
-                    newPath.append(Actions.left)
+                    newPath.append([Actions.right,Actions.forward])
+                    curdir = Directions.East
+                elif num == 3:
+                    newPath.append([Actions.right,Actions.right,Actions.forward])
+                    curdir = Directions.South
                 elif num == 4:
-                    newPath.append(Actions.right)
+                    newPath.append([Actions.left,Actions.forward])
+                    curdir = Directions.West
 
-            elif self.kb.dir == Directions.West:
+            elif curdir == Directions.South:
+                if num == 1:
+                    newPath.append([Actions.left,Actions.left,Actions.forward])
+                    curdir = Directions.North
+                elif num == 4:
+                    newPath.append([Actions.right,Actions.forward])
+                    curdir = Directions.West
+                elif num == 3:
+                    newPath.append(Actions.forward)
+                elif num == 2:
+                    newPath.append([Actions.left,Actions.forward])
+                    curdir = Directions.East
+
+            elif curdir == Directions.East:
+                if num == 1:
+                    newPath.append([Actions.left,Actions.forward])
+                    curdir = Directions.North
+                elif num == 2:
+                    newPath.append(Actions.forward)
+                elif num == 4:
+                    newPath.append([Actions.right,Actions.right,Actions.forward])
+                    curdir = Directions.West
+                elif num == 3:
+                    newPath.append([Actions.right,Actions.forward])
+                    curdir = Directions.South
+
+            elif curdir == Directions.West:
                 if num == 4:
-                    newPath.append(Actions.left)
-                elif num == 2:
-                    newPath.append(Actions.right)
-                elif num == 3:
                     newPath.append(Actions.forward)
+                elif num == 2:
+                    newPath.append([Actions.left,Actions.left,Actions.forward])
+                    curdir = Directions.East
+                elif num == 3:
+                    newPath.append([Actions.left,Actions.forward])
+                    curdir = Directions.South
+                elif num == 1:
+                    newPath.append([Actions.right,Actions.forward])
+                    curdir = Directions.North
         return newPath
 
     #need to implement possibility of killing wumpus to get potential loc
