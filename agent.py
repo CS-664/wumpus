@@ -35,6 +35,9 @@ class KBAgent:
         self.kb.update()
 
     def act(self, gameboard):
+        #print(self.kb.safe)
+        #print(self.kb.pit)
+        #print(self.kb.wumpus)
         self.perceive(gameboard)
         actions = self.ask()
         for action in actions:
@@ -120,7 +123,6 @@ class KBAgent:
                     oldPath.append(4)#west
 
         curdir = self.kb.dir 
-        print(oldPath)
         for num in oldPath:
             if curdir == Directions.North:
                 if num == 1:
@@ -240,11 +242,12 @@ class KB:
                     self.wumpus[nx][ny] = 0.0
                     for s in self.stench_neighbor(nx,ny):
                         self.cal_wumpus(s[0],s[1])
-
+                print()
                 self.safe[loc[0]][loc[1]] = True 
         #Case 2: Stench and Breeze
         elif self.stench[x][y] and self.breeze[x][y]:
             #Probably have to check pit prob and wumpus prob of current loc
+            self.locate_wumpus(x, y)
             stench_candidate = []
             breeze_candidate = []
             for loc in self.neighbor(x,y):
@@ -266,25 +269,24 @@ class KB:
                 if self.pit[nx][ny] == -1.0 or 0.0 < self.pit[nx][ny] < 1.0:
                     candidate.append([nx,ny])
                 #clear wumpus probability
-                if 0.0 < self.wumpus[nx][ny] < 1.0:
-                    self.wumpus[nx][ny] = 0.0
-                    for s in self.stench_neighbor(nx,ny):
-                        self.cal_wumpus(s[0],s[1])
+                self.wumpus[nx][ny] = 0.0 #changed
+                for s in self.stench_neighbor(nx,ny):
+                    self.cal_wumpus(s[0],s[1])
             for i in range(len(candidate)):
                 self.pit[candidate[i][0]][candidate[i][1]] = 1/len(candidate)
         #Case 4: Stench
         elif self.stench[x][y]:
             #Probably have to check pit prob and wumpus prob of current loc
             candidate = []
+            self.locate_wumpus(x, y)
             for loc in self.neighbor(x,y):
                 nx, ny = loc[0], loc[1]
                 if self.wumpus[nx][ny] == -1.0 or 0.0 < self.wumpus[nx][ny] < 1.0:
                     candidate.append([nx,ny])
                 #clear pit probability
-                if 0.0 < self.pit[nx][ny] < 1.0:
-                    self.pit[nx][ny] = 0.0
-                    for s in self.breeze_neighbor(nx,ny):
-                        self.cal_pit(s[0],s[1])
+                self.pit[nx][ny] = 0.0 #changed
+                for s in self.breeze_neighbor(nx,ny):
+                    self.cal_pit(s[0],s[1])
             for i in range(len(candidate)):
                 self.wumpus[candidate[i][0]][candidate[i][1]] = 1/len(candidate)
         
@@ -353,6 +355,34 @@ class KB:
                 res.append([nx, ny])
         return res
     
+    def locate_wumpus(self,x,y):
+        x2, y2 = -1, -1
+        if 0 < x-1 < len(self.safe)-1 and 0 < y-1 < len(self.safe)-1 and self.stench[x-1][y-1]:
+            x2, y2 = x-1, y-1
+        elif 0 < x-1 < len(self.safe)-1 and 0 < y+1 < len(self.safe)-1 and self.stench[x-1][y+1]:
+            x2, y2 = x-1, y+1
+        elif 0 < x+1 < len(self.safe)-1 and 0 < y-1 < len(self.safe)-1 and self.stench[x+1][y-1]:
+            x2, y2 = x+1, y-1
+        elif 0 < x+1 < len(self.safe)-1 and 0 < y+1 < len(self.safe)-1 and self.stench[x+1][y+1]:
+            x2, y2 = x+1, y+1
+        if x2 == -1:
+            return 
+        else:
+            if self.safe[x][y2]:
+                for i in range(len(self.safe)):
+                    for j in range(len(self.safe[0])):
+                        self.wumpus[i][j] = 0.0
+                        if self.pit[i][j] == 0.0:
+                            self.safe[i][j] = True
+                self.wumpus[x2][y] = 1.0
+            elif self.safe[x2][y]:
+                for i in range(len(self.safe)):
+                    for j in range(len(self.safe[0])):
+                        self.wumpus[i][j] = 0.0
+                        if self.pit[i][j] == 0.0:
+                            self.safe[i][j] = True
+                self.wumpus[x][y2] = 1.0
+
     #Can be modified
     def checksafe(self,x,y):
         for i in range(x):
