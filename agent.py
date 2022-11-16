@@ -99,22 +99,43 @@ class KBAgent:
     def findPath(self,startx, starty, endx, endy):
         oldPath = []
         newPath = []
+        xxx = 0
+        yyy = 0
         xx = startx
         yy = starty
-        # print(startx, starty, endx, endy)
-        # print(self.kb.safe[xx][yy+1])
+        print(startx, starty, endx, endy)
         while not (xx == endx and yy == endy):
+
             if xx != endx:
-                if self.kb.safe[xx+1][yy] == True:
+                if self.kb.safe[xx+1][yy] == True and self.kb.safe[xx-1][yy] == True:
+                    if xx > endx:
+                        xx -= 1
+                        oldPath.append(1)  # south
+                    if xx < endx:
+                        xx += 1
+                        oldPath.append(3)  # north
+
+
+                elif self.kb.safe[xx+1][yy] == True:
+                    xxx = 1
                     xx+=1
                     oldPath.append(3)#north
 
+
                 elif self.kb.safe[xx-1][yy] == True:
+
                     xx-=1
                     oldPath.append(1)#south
 
             if yy != endy:
-                if self.kb.safe[xx][yy+1] == True:
+                if self.kb.safe[xx][yy+1] == True and self.kb.safe[xx][yy-1] == True:
+                    if yy > endy:
+                        yy -= 1
+                        oldPath.append(4)  # west
+                    if yy < endy:
+                        yy += 1
+                        oldPath.append(2)  # east
+                elif self.kb.safe[xx][yy+1] == True:
                     yy+=1
                     oldPath.append(2)#east
 
