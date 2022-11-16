@@ -4,6 +4,8 @@ class Board:
     '''
 
     def __init__(self, x, y):
+        self.startx = 0
+        self.starty = 0
         self.map = [[None for x in range(x)]for y in range(y)]
         for i in range(x):
             for j in range(y):

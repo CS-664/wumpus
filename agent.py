@@ -128,52 +128,52 @@ class KBAgent:
                 if num == 1:
                     newPath.append(Actions.forward)
                 elif num == 2:
-                    newPath.append([Actions.right,Actions.forward])
+                    newPath.extend([Actions.right,Actions.forward])
                     curdir = Directions.East
                 elif num == 3:
-                    newPath.append([Actions.right,Actions.right,Actions.forward])
+                    newPath.extend([Actions.right,Actions.right,Actions.forward])
                     curdir = Directions.South
                 elif num == 4:
-                    newPath.append([Actions.left,Actions.forward])
+                    newPath.extend([Actions.left,Actions.forward])
                     curdir = Directions.West
 
             elif curdir == Directions.South:
                 if num == 1:
-                    newPath.append([Actions.left,Actions.left,Actions.forward])
+                    newPath.extend([Actions.left,Actions.left,Actions.forward])
                     curdir = Directions.North
                 elif num == 4:
-                    newPath.append([Actions.right,Actions.forward])
+                    newPath.extend([Actions.right,Actions.forward])
                     curdir = Directions.West
                 elif num == 3:
                     newPath.append(Actions.forward)
                 elif num == 2:
-                    newPath.append([Actions.left,Actions.forward])
+                    newPath.extend([Actions.left,Actions.forward])
                     curdir = Directions.East
 
             elif curdir == Directions.East:
                 if num == 1:
-                    newPath.append([Actions.left,Actions.forward])
+                    newPath.extend([Actions.left,Actions.forward])
                     curdir = Directions.North
                 elif num == 2:
                     newPath.append(Actions.forward)
                 elif num == 4:
-                    newPath.append([Actions.right,Actions.right,Actions.forward])
+                    newPath.extend([Actions.right,Actions.right,Actions.forward])
                     curdir = Directions.West
                 elif num == 3:
-                    newPath.append([Actions.right,Actions.forward])
+                    newPath.extend([Actions.right,Actions.forward])
                     curdir = Directions.South
 
             elif curdir == Directions.West:
                 if num == 4:
                     newPath.append(Actions.forward)
                 elif num == 2:
-                    newPath.append([Actions.left,Actions.left,Actions.forward])
+                    newPath.extend([Actions.left,Actions.left,Actions.forward])
                     curdir = Directions.East
                 elif num == 3:
-                    newPath.append([Actions.left,Actions.forward])
+                    newPath.extend([Actions.left,Actions.forward])
                     curdir = Directions.South
                 elif num == 1:
-                    newPath.append([Actions.right,Actions.forward])
+                    newPath.extend([Actions.right,Actions.forward])
                     curdir = Directions.North
         return newPath
 
@@ -273,7 +273,7 @@ class KB:
                     for s in self.stench_neighbor(nx,ny):
                         self.cal_wumpus(s[0],s[1])
             for i in range(len(candidate)):
-                self.pit[candidate[i][0],candidate[i][1]] = 1/len(candidate)
+                self.pit[candidate[i][0]][candidate[i][1]] = 1/len(candidate)
         #Case 4: Stench
         elif self.stench[x][y]:
             #Probably have to check pit prob and wumpus prob of current loc

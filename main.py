@@ -22,7 +22,10 @@ def InitialBoard():
         iniboard = BoardInform[i].split(",")
         for n in range(2,len(iniboard)):
             TBoard.input(int(iniboard[0]),int(iniboard[1]),informChecker(iniboard[n]))
-    return TBoard.map
+            if iniboard[n] == 'E' or iniboard[n] == 'e':
+                TBoard.startx = int(iniboard[0])
+                TBoard.starty = int(iniboard[1])
+    return TBoard
 
 # check the direction for current bot
 def dChecker (d,a):
@@ -53,8 +56,7 @@ def main():
     gameBoard = InitialBoard()      # initializate game information
     gameAgent = KBAgent(5,5,0,0)
     gameScore = 100
-    actionList = gameAgent.act(gameBoard)
-    locx,locy = 0,0
+    locx,locy = gameBoard.startx, gameBoard.starty
     resultBoard = [[0,0,0,0,0],
                    [0,0,0,0,0],
                    [0,0,0,0,0],
@@ -62,38 +64,38 @@ def main():
                    [0,0,0,0,0]]
     resultBoard[locx][locy] = 1      # The location of "Enter" has already been reached before starting the game
     agentDirection = 1               # Initional direction for bot is north
+    g = 0
+    while g < 2:
+        actionList = gameAgent.act(gameBoard.map)
+        print(actionList)
 
+        for i in range(len(actionList)):
+            if actionList[i] == 1 or actionList[i] == 2:    # No movement, only change the current direction of the bot
+                agentDirection = dChecker(agentDirection,actionList[i])
+            elif actionList[i] == 3:                        # Bot have movement, mark the location on result board where it has reached by bot
+                gameScore -= 1
+                if agentDirection == 1:
+                    locx -= 1
+                    resultBoard[locx][locy] = 1
+                elif agentDirection == 2:
+                    locy += 1
+                    resultBoard[locx][locy] = 1
+                elif agentDirection == 3:
+                    locx += 1
+                    resultBoard[locx][locy] = 1
+                elif agentDirection == 4:
+                    locy -= 1
+                    resultBoard[locx][locy] = 1
+            elif actionList[i] == 6:                 # bot get gold, game over and break the for loop
+                gameScore += 1000
+                break
+            elif actionList[i] == 4:                  # No movement, but game score will be decreased because of shooting action
+                gameScore -= 100
 
+        #print(gameScore)
+        #print(resultBoard)      #   print the result of the game
+        g += 1                 
 
-    print(gameAgent.act(gameBoard))
-
-'''
-    for i in range(len(actionList)):
-        if actionList[i] == 1 or actionList[i] == 2:    # No movement, only change the current direction of the bot
-            agentDirection = dChecker(agentDirection,actionList[i])
-        elif actionList[i] == 3:                        # Bot have movement, mark the location on result board where it has reached by bot
-            gameScore -= 1
-            if agentDirection == 1:
-                locx -= 1
-                resultBoard[locx][locy] = 1
-            elif agentDirection == 2:
-                locy += 1
-                resultBoard[locx][locy] = 1
-            elif agentDirection == 3:
-                locx += 1
-                resultBoard[locx][locy] = 1
-            elif agentDirection == 4:
-                locy -= 1
-                resultBoard[locx][locy] = 1
-        elif actionList[i] == 6:                 # bot get gold, game over and break the for loop
-            gameScore += 1000
-            break
-        elif actionList[i] == 4:                  # No movement, but game score will be decreased because of shooting action
-            gameScore -= 100
-
-    print(gameScore)
-    print(resultBoard)                  #   print the result of the game
-'''
 
 
 
