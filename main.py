@@ -65,7 +65,7 @@ def main():
     resultBoard[locx][locy] = 1      # The location of "Enter" has already been reached before starting the game
     agentDirection = 1               # Initional direction for bot is north
     g = 0
-    while g < 2:
+    while g < 10:
         actionList = gameAgent.act(gameBoard.map)
         print(actionList)
 

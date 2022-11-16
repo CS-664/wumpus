@@ -104,13 +104,13 @@ class KBAgent:
             if xx != endx:
                 if self.kb.safe[xx+1][yy] == True:
                     xx+=1
-                    oldPath.append(1)#north
+                    oldPath.append(3)#north
 
                 elif self.kb.safe[xx-1][yy] == True:
                     xx-=1
-                    oldPath.append(3)#south
+                    oldPath.append(1)#south
 
-            elif yy != endy:
+            if yy != endy:
                 if self.kb.safe[xx][yy+1] == True:
                     yy+=1
                     oldPath.append(2)#east
@@ -119,10 +119,8 @@ class KBAgent:
                     yy-=1
                     oldPath.append(4)#west
 
-            else:
-                oldPath.append(5)
-
         curdir = self.kb.dir 
+        print(oldPath)
         for num in oldPath:
             if curdir == Directions.North:
                 if num == 1:
@@ -288,7 +286,7 @@ class KB:
                     for s in self.breeze_neighbor(nx,ny):
                         self.cal_pit(s[0],s[1])
             for i in range(len(candidate)):
-                self.wumpus[candidate[i][0],candidate[i][1]] = 1/len(candidate)
+                self.wumpus[candidate[i][0]][candidate[i][1]] = 1/len(candidate)
         
     def shoot(self):
         if self.arrow == False:
