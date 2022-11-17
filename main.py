@@ -73,10 +73,11 @@ def main():
                    ['0','0','0','0','0'],
                    ['0','0','0','0','0'],
                    ['0','0','0','0','0']]
+    getGold = True
     resultBoard[locx][locy] = '1'      # The location of "Enter" has already been reached before starting the game
     agentDirection = Directions.North               # Initional direction for bot is north
     g = 0
-    while g < 10:
+    while getGold:
         actionList = gameAgent.act(gameBoard.map)
         print(actionList)
 
@@ -106,12 +107,16 @@ def main():
                 print(" ")            #No meaning
 
             elif actionList[i] == Actions.grab:                 # bot get gold, game over and break the for loop
-                gameScore += 1000
-                print('Bingo! You get the gold!')
-                break
+                if gameBoard.map[locx][locy]['gold'] == True:
+                    gameScore += 1000
+                    print('Bingo! You get the gold!')
+                    getGold = False
+                    break
+                else:
+                    print('Something was Wrong! Check the code')
             elif actionList[i] == Actions.shoot:                  # No movement, but game score will be decreased because of shooting action
-                print('Arrow being used!')
                 gameScore -= 100
+  #              if
 
         print(gameScore)  #Print Final Score of the game
 
