@@ -103,11 +103,12 @@ class KBAgent:
         yyy = 0
         xx = startx
         yy = starty
+
         print(startx, starty, endx, endy)
         while not (xx == endx and yy == endy):
 
             if xx != endx:
-                if self.kb.safe[xx+1][yy] == True and self.kb.safe[xx-1][yy] == True and xx+1 < 4:
+                if self.kb.safe[xx+1][yy] == True and self.kb.safe[xx-1][yy] == True and xx+1 <= (len(self.kb.safe)) :
                     if xx > endx:
                         xx -= 1
                         oldPath.append(1)  # south
@@ -116,8 +117,8 @@ class KBAgent:
                         oldPath.append(3)  # north
 
 
-                elif self.kb.safe[xx+1][yy] == True and xx+1 < 4:
-                    print("xxx")
+                elif self.kb.safe[xx+1][yy] == True and xx+1 <= (len(self.kb.safe)):
+                    print("www")
                     xx+=1
                     print(xx)
                     print(yy)
@@ -126,29 +127,28 @@ class KBAgent:
 
                 elif self.kb.safe[xx-1][yy] == True:
 
-                    print("fff")
+
                     xx-=1
                     oldPath.append(1)#south
-                    print(xx)
-                    print(yy)
+
 
             if yy != endy:
-                if self.kb.safe[xx][yy+1] == True and self.kb.safe[xx][yy-1] == True and yy+1 < 4:
+                if self.kb.safe[xx][yy+1] == True and self.kb.safe[xx][yy-1] == True and yy+1 < len(self.kb.safe[xx]):
                     if yy > endy:
                         yy -= 1
                         oldPath.append(4)  # west
                     if yy < endy:
                         yy += 1
-                        oldPath.append(2)  # eastiv
-                elif self.kb.safe[xx][yy+1] == True and yy+1 < 4:
-                    print(xx)
-                    print(yy)
-                    print("yyy")
+                        oldPath.append(2)  # east
+                elif self.kb.safe[xx][yy+1] == True and yy+1 <= len(self.kb.safe[xx]):
+
                     yy+=1
                     oldPath.append(2)#east
 
                 elif self.kb.safe[xx][yy-1] == True:
+                    print("erer")
                     yy-=1
+                    print(yy)
                     oldPath.append(4)#west
 
         curdir = self.kb.dir 
