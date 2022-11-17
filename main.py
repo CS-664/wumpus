@@ -85,6 +85,7 @@ def main():
                 agentDirection = dChecker(agentDirection,actionList[i])
             elif actionList[i] == Actions.forward:                        # Bot have movement, mark the location on result board where it has reached by bot
                 gameScore -= 1
+                time.sleep(2)
                 if agentDirection == Directions.North:
                     resultBoard[locx][locy] = '1'
                     locx -= 1
@@ -102,10 +103,14 @@ def main():
                     locy -= 1
                     resultBoard[locx][locy] = 'B'
                 boardPrinter(resultBoard)          # Print the Updating game board
-                time.sleep(5)
+                print(" ")            #No meaning
+
             elif actionList[i] == Actions.grab:                 # bot get gold, game over and break the for loop
                 gameScore += 1000
+                print('Bingo! You get the gold!')
+                break
             elif actionList[i] == Actions.shoot:                  # No movement, but game score will be decreased because of shooting action
+                print('Arrow being used!')
                 gameScore -= 100
 
         print(gameScore)  #Print Final Score of the game
