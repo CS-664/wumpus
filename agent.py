@@ -133,20 +133,19 @@ class KBAgent:
 
 
             if yy != endy:
-                if self.kb.safe[xx][yy+1] == True and self.kb.safe[xx][yy-1] == True and yy+1 < len(self.kb.safe[xx]):
+                if yy+1 < len(self.kb.safe[xx]) and self.kb.safe[xx][yy+1] == True and self.kb.safe[xx][yy-1] == True:
                     if yy > endy:
                         yy -= 1
                         oldPath.append(4)  # west
                     if yy < endy:
                         yy += 1
                         oldPath.append(2)  # east
-                elif self.kb.safe[xx][yy+1] == True and yy+1 <= len(self.kb.safe[xx]):
+                elif yy+1 < len(self.kb.safe[xx]) and self.kb.safe[xx][yy+1] == True :
 
                     yy+=1
                     oldPath.append(2)#east
 
                 elif self.kb.safe[xx][yy-1] == True:
-                    print("erer")
                     yy-=1
                     print(yy)
                     oldPath.append(4)#west
