@@ -15,7 +15,7 @@ def informChecker(w):
         return 'pit'
 
 def InitialBoard():
-    fileObject = open('BoardInfrom.txt', "r")
+    fileObject = open('BoardInfrom1.txt', "r")
     data = fileObject.read()          # Get the detail of testing board
     BoardInform = data.split()
     TBoard = Board(5,5)                 # initial game board
@@ -76,7 +76,6 @@ def main():
     getGold = True
     resultBoard[locx][locy] = '1'      # The location of "Enter" has already been reached before starting the game
     agentDirection = Directions.North               # Initional direction for bot is north
-    g = 0
     while getGold:
         actionList = gameAgent.act(gameBoard.map)
         print(actionList)
@@ -86,7 +85,6 @@ def main():
                 agentDirection = dChecker(agentDirection,actionList[i])
             elif actionList[i] == Actions.forward:                        # Bot have movement, mark the location on result board where it has reached by bot
                 gameScore -= 1
-                time.sleep(2)
                 if agentDirection == Directions.North:
                     resultBoard[locx][locy] = '1'
                     locx -= 1
@@ -142,7 +140,6 @@ def main():
                         print('Something was Wrong, check code!')
         print(gameScore)  #Print Final Score of the game
 
-        g += 1
 
 
 

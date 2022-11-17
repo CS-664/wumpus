@@ -35,9 +35,9 @@ class KBAgent:
         self.kb.update()
 
     def act(self, gameboard):
-        print(self.kb.safe)
+        #print(self.kb.safe)
         #print(self.kb.pit)
-        print(self.kb.wumpus)
+        #print(self.kb.wumpus)
         self.perceive(gameboard)
         actions = self.ask()
         for action in actions:
@@ -92,8 +92,77 @@ class KBAgent:
             for loc in locations:
                 return self.findPath(x,y,loc[0],loc[1])
         else:
-            #Find and kill wumpus
-            return []
+            wx, wy = -1, -1
+            for i in range(len(self.kb.safe)):
+                for j in range(len(self.kb.safe[0])):
+                    if self.kb.wumpus[i][j] == 1.0:
+                        wx, wy = i, j
+            if wx == -1:
+                return []
+            else:
+                for loc in self.kb.neighbor(wx,wy):
+                    if self.kb.safe[loc[0]][loc[1]]:
+                        path = self.findPath(self.kb.x, self.kb.y, loc[0], loc[1])
+                        curdir = self.kb.dir
+                        for dir in path:
+                            if dir == Actions.right:
+                                if curdir == Directions.North:
+                                    curdir = Directions.East
+                                elif curdir == Directions.East:
+                                    curdir = Directions.South
+                                elif curdir == Directions.South:
+                                    curdir = Directions.West
+                                else:
+                                    curdir = Directions.North
+                            if dir == Actions.left:
+                                if curdir == Directions.North:
+                                    curdir = Directions.West
+                                elif curdir == Directions.West:
+                                    curdir = Directions.South
+                                elif curdir == Directions.South:
+                                    curdir = Directions.East
+                                else:
+                                    curdir = Directions.North
+                        if loc[0] == wx:
+                            if loc[1] == wy + 1:
+                                if curdir == Directions.North:
+                                    path.extend([Actions.left,Actions.shoot])
+                                elif curdir == Directions.West:
+                                    path.append(Actions.shoot)
+                                elif curdir == Directions.East:
+                                    path.extend([Actions.left,Actions.left,Actions.shoot])
+                                elif curdir == Directions.South:
+                                    path.extend([Actions.right,Actions.shoot])
+                            else:
+                                if curdir == Directions.North:
+                                    path.extend([Actions.right,Actions.shoot])
+                                elif curdir == Directions.East:
+                                    path.append(Actions.shoot)
+                                elif curdir == Directions.West:
+                                    path.extend([Actions.left,Actions.left,Actions.shoot])
+                                elif curdir == Directions.South:
+                                    path.extend([Actions.left,Actions.shoot])
+                        else:
+                            if loc[0] == wx + 1:
+                                if curdir == Directions.West:
+                                    path.extend([Actions.right,Actions.shoot])
+                                elif curdir == Directions.North:
+                                    path.append(Actions.shoot)
+                                elif curdir == Directions.South:
+                                    path.extend([Actions.left,Actions.left,Actions.shoot])
+                                elif curdir == Directions.East:
+                                    path.extend([Actions.left,Actions.shoot])
+                            else:
+                                if curdir == Directions.East:
+                                    path.extend([Actions.right,Actions.shoot])
+                                elif curdir == Directions.South:
+                                    path.append(Actions.shoot)
+                                elif curdir == Directions.North:
+                                    path.extend([Actions.left,Actions.left,Actions.shoot])
+                                elif curdir == Directions.West:
+                                    path.extend([Actions.left,Actions.shoot])
+                        return path
+                return []
 
 
     def findPath(self,startx, starty, endx, endy):
@@ -317,13 +386,17 @@ class KB:
         if self.arrow == False:
             return
         if self.dir == Directions.North:
-            self.wumpus[self.x-1][y] = 0.0
+            self.wumpus[self.x-1][self.y] = 0.0
+            self.safe[self.x-1][self.y] = True
         elif self.dir == Directions.South:
-            self.wumpus[self.x+1][y] = 0.0
+            self.wumpus[self.x+1][self.y] = 0.0
+            self.safe[self.x+1][self.y] = True
         elif self.dir == Directions.East:
-            self.wumpus[self.x][y+1] = 0.0
+            self.wumpus[self.x][self.y+1] = 0.0
+            self.safe[self.x][self.y+1] = True
         else:
-            self.wumpus[self.x][y-1] = 0.0
+            self.wumpus[self.x][self.y-1] = 0.0
+            self.safe[self.x][self.y-1] = True
         self.arrow = False  
             
     def cal_wumpus(self,x,y): 
