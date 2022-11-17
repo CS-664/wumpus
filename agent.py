@@ -108,7 +108,7 @@ class KBAgent:
         while not (xx == endx and yy == endy):
 
             if xx != endx:
-                if self.kb.safe[xx+1][yy] == True and self.kb.safe[xx-1][yy] == True and xx+1 <= (len(self.kb.safe)) :
+                if xx+1 <= (len(self.kb.safe)) and self.kb.safe[xx+1][yy] == True and self.kb.safe[xx-1][yy] == True:
                     if xx > endx:
                         xx -= 1
                         oldPath.append(1)  # south
@@ -117,17 +117,12 @@ class KBAgent:
                         oldPath.append(3)  # north
 
 
-                elif self.kb.safe[xx+1][yy] == True and xx+1 <= (len(self.kb.safe)):
-                    print("www")
+                elif xx+1 <= (len(self.kb.safe)) and self.kb.safe[xx+1][yy] == True:
                     xx+=1
-                    print(xx)
-                    print(yy)
                     oldPath.append(3)#north
 
 
                 elif self.kb.safe[xx-1][yy] == True:
-
-
                     xx-=1
                     oldPath.append(1)#south
 
@@ -147,7 +142,7 @@ class KBAgent:
 
                 elif self.kb.safe[xx][yy-1] == True:
                     yy-=1
-                    print(yy)
+
                     oldPath.append(4)#west
 
         curdir = self.kb.dir 
