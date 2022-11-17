@@ -35,9 +35,9 @@ class KBAgent:
         self.kb.update()
 
     def act(self, gameboard):
-        #print(self.kb.safe)
+        print(self.kb.safe)
         #print(self.kb.pit)
-        #print(self.kb.wumpus)
+        print(self.kb.wumpus)
         self.perceive(gameboard)
         actions = self.ask()
         for action in actions:
@@ -229,7 +229,6 @@ class KB:
             return 
         self.visited[x][y] = True
         self.safe[x][y] = True
-        self.checksafe(len(self.pit),len(self.pit[0]))
         #Case 1: No Stench or Breeze
         #Do I need check current pit/wumpus possibility? 72 and 79
         if not self.stench[x][y] and not self.breeze[x][y]:
@@ -310,6 +309,7 @@ class KB:
                     self.cal_pit(s[0],s[1])
             for i in range(len(candidate)):
                 self.wumpus[candidate[i][0]][candidate[i][1]] = 1/len(candidate)
+        self.checksafe(len(self.pit),len(self.pit[0]))
         
     def shoot(self):
         if self.arrow == False:
@@ -410,3 +410,5 @@ class KB:
             for j in range(y):
                 if self.pit[i][j] == 0.0 and self.wumpus[i][j] == 0.0:
                     self.safe[i][j] = True
+                else:
+                    self.safe[i][j] = False
