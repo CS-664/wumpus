@@ -116,8 +116,30 @@ def main():
                     print('Something was Wrong! Check the code')
             elif actionList[i] == Actions.shoot:                  # No movement, but game score will be decreased because of shooting action
                 gameScore -= 100
-  #              if
-
+                if agentDirection == Directions.North:
+                    if gameBoard.map[locx-1][locy]['wumpus'] == True:
+                        print('You killed the wumpus!')
+                        gameBoard.map[locx-1][locy]['wumpus'] = False
+                    else:
+                        print('Something was Wrong, check code!')
+                elif agentDirection == Directions.East:
+                    if gameBoard.map[locx][locy+1]['wumpus'] == True:
+                        print('You killed the wumpus!')
+                        gameBoard.map[locx][locy+1]['wumpus'] = False
+                    else:
+                        print('Something was Wrong, check code!')
+                elif agentDirection == Directions.South:
+                    if gameBoard.map[locx+1][locy]['wumpus'] == True:
+                        print('You killed the wumpus!')
+                        gameBoard.map[locx+1][locy]['wumpus'] = False
+                    else:
+                        print('Something was Wrong, check code!')
+                elif agentDirection == Directions.West:
+                    if gameBoard.map[locx][locy-1]['wumpus'] == True:
+                        print('You killed the wumpus!')
+                        gameBoard.map[locx][locy-1]['wumpus'] = False
+                    else:
+                        print('Something was Wrong, check code!')
         print(gameScore)  #Print Final Score of the game
 
         g += 1
